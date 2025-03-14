@@ -1,9 +1,9 @@
-var express = require('express');
+const express = require('express');
 const passport = require('passport');
-var router = express.Router();
-const userModel = require("./user");
-const postModel = require("./posts");
-const upload = require("./file_Uploader");
+const router = express.Router();
+const userModel = require("../models/user");
+const postModel = require("../models/posts");
+const upload = require("../utils/fileUploader");
 const path = require('path');
 const fs = require('fs').promises;
 

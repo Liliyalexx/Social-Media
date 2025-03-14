@@ -1,8 +1,8 @@
-const fileUploader = require('multer');
+const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const path = require("path");
 
-const storage = fileUploader.diskStorage({
+const storage = multer.diskStorage({
     destination: function (req, file, cb){
         cb(null, './public/images/uploads')
     },
@@ -12,6 +12,6 @@ const storage = fileUploader.diskStorage({
     }
 });
 
-const upload = fileUploader({storage: storage});
+const upload = multer({storage: storage});
 
 module.exports = upload;
