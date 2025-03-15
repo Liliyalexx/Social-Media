@@ -42,7 +42,13 @@ router.get('/show/posts', isLoggedIn, async function(req, res, next) {
     .populate('posts');
     res.render('show', {user});
 });
-
+router.get('/feed', isLoggedIn, async function(req, res, next) {
+    const user = await userModel.findOne({
+        username:req.session.passport.user
+    })
+    const posts = await postModel.find();
+    res.render('feed', {posts, user});
+});
 
 function isLoggedIn(req, res, next){
     if (req.isAuthenticated()) return next();
