@@ -26,4 +26,20 @@ router.post('/signup', upload.single('image'), async function(req, res, next) {
   await user.save();
   res.redirect('/');
 });
+
+router.get('/profile', isLoggedIn, async function(req, res, next) {
+    const user = await userModel.findOne({
+        username:req.session.passport.user
+    })
+    .populate('posts');
+    res.render('profile', {user});
+});
+
+
+function isLoggedIn(req, res, next){
+    if (req.isAuthenticated()) return next();
+    res.redirect("/");
+  }
+  
+
 module.exports = router;
