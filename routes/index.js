@@ -1,134 +1,215 @@
-const express = require('express');
-const passport = require('passport');
+const express = require("express");
+const session = require("express-session");
+const passport = require("passport");
 const router = express.Router();
 const userModel = require("../models/user");
 const postModel = require("../models/posts");
 const upload = require("../utils/fileUploader");
-const path = require('path');
-const fs = require('fs').promises;
+const path = require("path");
+const fs = require("fs").promises;
 const localStrategy = require("passport-local");
 passport.use(new localStrategy(userModel.authenticate()));
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', {error: req.flash('error')});
+router.get("/", function (req, res, next) {
+  res.render("index", { error: req.flash("error") });
 });
 
-
-router.get('/signup', function(req, res, next) {
-  res.render('signup');
+router.get("/signup", function (req, res, next) {
+  res.render("signup");
 });
 
+router.get("/profile", isLoggedIn, async function (req, res, next) {
+  const user = await userModel
+    .findOne({
+      username: req.session.passport.user,
+    })
+    .populate("posts");
+  res.render("profile", { user });
+});
 
-router.get('/profile', isLoggedIn, async function ( req, res, next){
+router.get("/show/posts", isLoggedIn, async function (req, res, next) {
+  const user = await userModel
+    .findOne({
+      username: req.session.passport.user,
+    })
+    .populate("posts");
+  res.render("show", { user });
+});
+
+router.get("/feed", isLoggedIn, async function (req, res, next) {
+  const user = await userModel.findOne({ username: req.session.passport.user });
+  const posts = await postModel.find().populate("user");
+  res.render("feed", { user, posts });
+});
+
+router.get("/addpost", isLoggedIn, async function (req, res, next) {
   const user = await userModel.findOne({
-    username: req.session.passport.user
-  })
-  .populate("posts")
-  res.render("profile", {user});
+    username: req.session.passport.user,
+  });
+  res.render("addpost", { user });
 });
 
-router.get('/show/posts', isLoggedIn, async function ( req, res, next){
-  const user = await userModel.findOne({
-    username: req.session.passport.user
-  })
-  .populate("posts")
-  res.render("show", {user});
+router.get("/feed", function (req, res, next) {
+  res.render("feed");
 });
 
-router.get('/feed', isLoggedIn, async function ( req, res, next){
-  const user = await userModel.findOne({username: req.session.passport.user})
-  const posts = await postModel.find()
-  .populate("user")
-  res.render("feed", {user, posts});
-});
+router.post(
+  "/fileupload",
+  isLoggedIn,
+  upload.single("image"),
+  async function (req, res, next) {
+    const user = await userModel.findOne({
+      username: req.session.passport.user,
+    });
+    user.profileImage = req.file.filename;
+    await user.save();
+    res.redirect("/profile");
+  }
+);
 
-router.get('/addpost', isLoggedIn, async function ( req, res, next){
-  const user = await userModel.findOne({
-    username: req.session.passport.user
-  })
-  res.render("addpost", {user});
-});
-
-router.get('/feed', function(req, res, next) {
-  res.render('feed');
-});
-
-
-router.post("/fileupload", isLoggedIn, upload.single("image"), async function(req, res, next){
-  const user = await userModel.findOne({username: req.session.passport.user});
-  user.profileImage = req.file.filename;
-  await user.save();
-  res.redirect("/profile");
-})
-
-router.post('/uploadpost', isLoggedIn ,upload.single("postimage"), async function(req, res, next) {
-    if(!req.file){
-      return res.status(400).send("No files were uploaded.")
+router.post(
+  "/uploadpost",
+  isLoggedIn,
+  upload.single("postimage"),
+  async function (req, res, next) {
+    if (!req.file) {
+      return res.status(400).send("No files were uploaded.");
     }
-    const user = await userModel.findOne({username: req.session.passport.user});
+    const user = await userModel.findOne({
+      username: req.session.passport.user,
+    });
     const post = await postModel.create({
       image: req.file.filename,
       title: req.body.title,
       description: req.body.description,
-      user: user._id
-    })
+      user: user._id,
+    });
 
-    user.posts.push(post._id)
+    user.posts.push(post._id);
     await user.save();
     res.redirect("/profile");
+  }
+);
+
+router.get("/posts/edit/:id", isLoggedIn, async (req, res) => {
+  try {
+    const post = await postModel.findById(req.params.id);
+    if (!post) return res.status(404).send("Post not found");
+
+    res.render("edit", { post });
+  } catch (error) {
+    console.error("Error fetching post for edit:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+const ensureAuthenticated = (req, res, next) => {
+  if (req.isAuthenticated()) {
+      return next();
+  }
+  res.status(401).json({ message: "Unauthorized" });
+};
+
+// Apply this middleware to your update route
+router.put("/posts/update/:id", ensureAuthenticated, async (req, res) => {
+  try {
+      const postId = req.params.id;
+      const updatedData = req.body;
+
+      const updatedPost = await Post.findByIdAndUpdate(postId, updatedData, { new: true });
+
+      if (!updatedPost) {
+          return res.status(404).json({ message: "Post not found" });
+      }
+
+      res.json(updatedPost);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
 });
 
 
-router.post("/register", function(req, res){
-  const { username, email, fullname} = req.body;
-  const userData = new userModel ({username, email, fullname});
+// Update Post Route
+router.post("/posts/update/:id", isLoggedIn, upload.single("postimage"), async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const post = await postModel.findById(postId);
+    if (!post) return res.status(404).send("Post not found");
 
-  userModel.register(userData, req.body.password)
-  .then(function(){
-    passport.authenticate("local")(req, res, function(){
+    if (post.user.toString() !== req.session.passport.user) return res.status(403).send("Unauthorized");
+    console.log("Session Data:", req.session);
+
+
+    post.title = req.body.title;
+    post.description = req.body.description;
+    
+    if (req.file) {
+      const oldImagePath = path.join(__dirname, "../public/images/uploads", post.image);
+      await fs.unlink(oldImagePath).catch(err => console.error("Error deleting old image:", err));
+      post.image = req.file.filename;
+    }
+
+    await post.save();
+    res.redirect("/profile");
+  } catch (error) {
+    console.error("Error updating post:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
+
+router.post("/register", function (req, res) {
+  const { username, email, fullname } = req.body;
+  const userData = new userModel({ username, email, fullname });
+
+  userModel.register(userData, req.body.password).then(function () {
+    passport.authenticate("local")(req, res, function () {
       res.redirect("/profile");
-    })
-  })
-  })
-
-router.post("/login", passport.authenticate("local", {
-  successRedirect: "/profile",
-  failureRedirect: "/", 
-  failureFlash: true
-}), function (req, res){
+    });
+  });
 });
 
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/profile",
+    failureRedirect: "/",
+    failureFlash: true,
+  }),
+  function (req, res) {}
+);
 
-router.get("/logout", function(req, res, next){
-  req.logOut(function(err){
-    if (err) { return next (err); }
-    res.redirect('/');
+router.get("/logout", function (req, res, next) {
+  req.logOut(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
   });
-})
+});
 
-
-function isLoggedIn(req, res, next){
+function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) return next();
   res.redirect("/");
 }
 
-
-router.post('/deletepost/:postId', isLoggedIn, async function (req, res, next) {
+router.post("/deletepost/:postId", isLoggedIn, async function (req, res, next) {
   try {
     const postId = req.params.postId;
 
     // Find the post by ID and populate the user field
-    const post = await postModel.findById(postId).populate('user');
+    const post = await postModel.findById(postId).populate("user");
 
     // Check if the post exists
     if (!post) {
-      return res.status(404).json({ success: false, message: 'Post not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Post not found" });
     }
 
     // Ensure that the user making the request is the owner of the post
     if (post.user.username !== req.session.passport.user) {
-      return res.status(403).json({ success: false, message: 'Unauthorized' });
+      return res.status(403).json({ success: false, message: "Unauthorized" });
     }
 
     // Remove the post from the user's posts array
@@ -137,17 +218,22 @@ router.post('/deletepost/:postId', isLoggedIn, async function (req, res, next) {
     await user.save();
 
     // Construct the full path to the image file
-    const imagePath = path.join(__dirname, '../public/images/uploads', post.image);
+    const imagePath = path.join(
+      __dirname,
+      "../public/images/uploads",
+      post.image
+    );
 
-    console.log('Attempting to delete file at path:', imagePath);
+    console.log("Attempting to delete file at path:", imagePath);
 
     // Check if the file exists before attempting to delete
-    const fileExists = await fs.access(imagePath)
+    const fileExists = await fs
+      .access(imagePath)
       .then(() => true)
       .catch(() => false);
 
     if (fileExists) {
-      console.log('File exists, attempting to delete...');
+      console.log("File exists, attempting to delete...");
 
       // Delete the post from the database using findByIdAndDelete
       await postModel.findByIdAndDelete(postId);
@@ -155,19 +241,18 @@ router.post('/deletepost/:postId', isLoggedIn, async function (req, res, next) {
       // Delete the associated image file
       await fs.unlink(imagePath);
 
-      console.log('File deleted successfully.');
+      console.log("File deleted successfully.");
 
       // Respond with JSON indicating success
-      res.json({ success: true, message: 'Post deleted successfully' });
+      res.json({ success: true, message: "Post deleted successfully" });
     } else {
-      console.log('File not found.');
-      res.status(404).json({ success: false, message: 'Image file not found' });
+      console.log("File not found.");
+      res.status(404).json({ success: false, message: "Image file not found" });
     }
   } catch (error) {
-    console.error('Error during post deletion:', error);
-    res.status(500).json({ success: false, message: 'Internal Server Error' });
+    console.error("Error during post deletion:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
-
 
 module.exports = router;

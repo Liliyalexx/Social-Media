@@ -5,10 +5,12 @@ const mongoose = require("mongoose");
 const User = require("./models/user");
 const Post = require("./models/posts");
 const passport = require('passport');
+const LocalStrategy = require("passport-local").Strategy;
 const session = require('express-session');
 const flash = require('connect-flash');
 const upload = require("./utils/fileUploader");
 const path = require('path');
+const bodyParser = require("body-parser");
 // Initialize routers
 const indexRouter = require('./routes/index');
 
@@ -40,6 +42,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+
+// Passport config
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // Set the view engine and views directory
 app.set('view engine', 'ejs');
