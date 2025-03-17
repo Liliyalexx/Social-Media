@@ -46,13 +46,10 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Initialize routers
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/user'); // Initialize usersRouter here
 
 // Use routers
 app.use('/', indexRouter);
-app.use('/user', usersRouter); // Now usersRouter is defined
+app.use('/user', indexRouter); // Now usersRouter is defined
 
 // Start the server
 app.listen(port, () => {
