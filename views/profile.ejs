@@ -16,35 +16,61 @@
         
         <h1 class="text-3xl font-semibold mt-5"><%= user.fullname %></h1>
         <h3 class="text-md text-gray-500 text-base">@<%= user.username %></h3>
-        <a href="/posts/edit/<%= user.posts[0]?._id %>" class="bg-pink-500 hover:bg-blue-600 text-white font-bold py-2 px-10 rounded">Edit</a>
         <a href="/addpost" class="bg-purple-500 hover:bg-pink-600 text-white font-bold py-2 px-10 rounded">Add New Post</a>
       </div>
 
       <div class="cards flex flex-wrap gap-10 px-10 mt-10">
         <% user.posts.forEach(post => { %>
-          <div class="card">
-            <div class="w-52 h-40 bg-white rounded-lg overflow-hidden">
+          <div class="card bg-white rounded-lg shadow-lg p-4 w-64">
+            <!-- Post Image -->
+            <div class="w-full h-40 bg-white rounded-lg overflow-hidden">
               <img class="w-full h-full object-cover" src="/images/uploads/<%= post.image %>" alt="Post Image">
             </div>
+    
+            <!-- Post Title and Description -->
+            <div class="mt-2">
+              <h6 class="text-lg font-semibold"><%= post.title %></h6>
+            </div>
+    
+            <!-- Comments Section -->
+            <div class="mt-4">
+              <h6 class="text-sm font-semibold mb-2">Comments:</h6>
+              <% if (post.comments.length > 0) { %>
+                <% post.comments.forEach(comment => { %>
+                  <div class="flex items-start mb-2">
+                    <!-- Commenter's Profile Image -->
+                    <div class="w-8 h-8 rounded-full overflow-hidden mr-2">
+                      <img class="w-full h-full object-cover" src="/images/uploads/<%= comment.user.profileImage %>" alt="<%= comment.user.username %>">
+                    </div>
+                    <!-- Comment Text -->
+                    <div class="flex-1">
+                      <p class="text-sm text-gray-800"><strong><%= comment.user.username %></strong>: <%= comment.text %></p>
+                      <p class="text-xs text-gray-500"><%= comment.createdAt.toLocaleString() %></p>
+                    </div>
+                  </div>
+                <% }); %>
+              <% } else { %>
+                <p class="text-sm text-gray-500">No comments yet.</p>
+              <% } %>
+            </div>
+    
+            <!-- Edit Button -->
             <div class="w-full flex justify-center mt-2">
-            <a href="/posts/edit/<%= post._id %>" class="bg-pink-500 hover:bg-purple-600 text-white font-bold py-1  px-20 rounded-lg overflow-hidden text-center">Edit</a>
-          
+              <a href="/posts/edit/<%= post._id %>" class="bg-pink-500 hover:bg-purple-600 text-white font-bold py-1 px-20 rounded-lg overflow-hidden text-center">Edit</a>
+            </div>
           </div>
-        </div>
-        <% }) %>
+        <% }); %>
       </div>
-      
-
     </div>
-
-
+    
     <script>
       document.querySelector("#uploadicon").addEventListener("click", function(){
         document.querySelector("#uploadform input").click();
-      })
-
+      });
+    
       document.querySelector("#uploadform input").addEventListener("change", function(){
         document.querySelector("#uploadform").submit();
-      })
+      });
     </script>
-<%- include('./partials/footer') %>
+    
+    <%- include('./partials/footer') %>
