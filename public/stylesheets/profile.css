@@ -75,4 +75,6 @@ body {
   .button:hover {
     background-color: #df0812;
   }
-  
+  .weather-container {
+    margin-left: -100px; 
+  }
