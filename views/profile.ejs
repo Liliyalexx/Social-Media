@@ -15,11 +15,14 @@
   <script src="https://kit.fontawesome.com/14f67ef9ae.js" crossorigin="anonymous"></script>
 </head>
 <body>
+  <!-- Background Carousel -->
+  <div class="background-carousel"></div>
+
+  <!-- Header -->
   <%- include('./partials/header') %>
 
-  
-
-  <div class="profile w-full min-h-screen bg-slate-100 text-gray-800 pt-1">
+  <!-- Profile Content -->
+  <div class="profile w-full min-h-screen text-gray-800 pt-1 relative z-10">
     <form id="uploadform" hidden action="/fileupload" method="post" enctype="multipart/form-data">
       <input type="file" name="image">
     </form>
@@ -92,6 +95,7 @@
     });
   </script>
 
+  <!-- Footer -->
   <%- include('./partials/footer') %>
 </body>
 </html>
