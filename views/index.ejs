@@ -15,67 +15,61 @@
   <script src="https://kit.fontawesome.com/14f67ef9ae.js" crossorigin="anonymous"></script>
 </head>
 <body>
+  <div class="background-carousel"></div>
   <%- include('./partials/header.ejs') %>
+
   <div class="navbar">
-  <nav>
-    <img src="/images/PINS_BIG.png" alt="">
-    <a href="/signup" class="upbtn">Sign up</a>
-  </nav>
+    <nav>
+      <img class="w-[100px] w-20 rounded-full " src="/images/favicon-16x16.png" alt="">
+      <a href="/signup" class="upbtn">Sign up</a>
+    </nav>
   </div>
-  
-  <div class="container">
-    <div class="content">
-      <!--Visionary logo-->
-      <img src="/images/favicon-16x16.png" alt="pin logo" class="img1" />
-      <p class="header">Welcome to Visionary</p> 
+  <div class="landing">
+    <div class="container">
+      <div class="content">
+        <!--Visionary logo-->
+        <img class="w-20 rounded-full " src="/images/favicon-16x16.png" alt="pin logo" class="img1" />
+        <p class="header">Welcome to Visionary</p>
 
-      <% if (error.length > 0) { %>
-        <p class="error"><%= error %></p>
-      <% } %>
-     
+        <% if (error.length > 0) { %>
+          <p class="error"><%= error %></p>
+        <% } %>
 
-      <form action="/login" method="post">
-  
-        <label for="username" style="float: left; padding-left: 10px; font-size: 14px;">Username</label>
-        <input type="text" placeholder="Username" name="username" class="detail" id="username"/><br />
-  
-        <label for="password" style="float: left; padding-left: 10px; font-size: 14px;">Password</label><br />
-        <input type="password" placeholder="Password" name="password" class="detail" id="password"/>
+        <form action="/login" method="post">
+          <label for="username" style="float: left; padding-left: 10px; font-size: 14px;">Username</label>
+          <input type="text" placeholder="Username" name="username" class="detail" id="username"/><br />
+          <label for="password" style="float: left; padding-left: 10px; font-size: 14px;">Password</label><br />
+          <input type="password" placeholder="Password" name="password" class="detail" id="password"/>
+          <input type="submit" class="btn int" value="Log In">
+        </form>
 
-        <input type="submit" class="btn int" value="Log In">
+        <h4>Forgotten your password?</h4>
 
-      </form>
+        <p class="or">OR</p>
+        <button class="btn fbk">
+          <i class="fab fa-facebook fa-lg" style="color: white; padding-right: 10px"></i>
+          <a href="#">Continue with Facebook</a>
+        </button><br />
+        <button class="btn ggl">
+          <i class="google-logo fab fa-google" style="padding-right: 25px"></i>
+          <a href="#">Continue with Google</a>
+        </button>
 
-      <h4>Forgotten your password?</h4>
-
-      
-      <p class="or">OR</p>
-      <button class="btn fbk">
-        <i
-          class="fab fa-facebook fa-lg"
-          style="color: white; padding-right: 10px"
-        ></i
-        ><a href="#">Continue with Facebook</a></button
-      ><br />
-      <button class="btn ggl">
-        <i
-          class=" google-logo fab fa-google"
-          style="padding-right: 25px"
-        ></i
-        ><a href="#">Continue with Google</a>
-      </button>
-
-      <footer>
-        <p>
-          By continuing, you agree to Visionary's
-          <b>Terms of Service, Privacy policy.</b>
-        </p>
-        <hr />
-        <p>Not on Visionary yet? <a href="/signup">Sign up</a></p>
-      </footer>
+        <footer>
+          <p>
+            By continuing, you agree to Visionary's
+            <b>Terms of Service, Privacy policy.</b>
+          </p>
+          <hr />
+          <p>Not on Visionary yet? <a href="/signup">Sign up</a></p>
+        </footer>
+      </div>
     </div>
   </div>
-  
-  <%- include('./partials/footer') %>
+
+  <!-- Include Carousel -->
+
+  <%- include('./partials/footer.ejs') %>
+
 </body>
 </html>
