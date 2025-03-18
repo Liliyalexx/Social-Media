@@ -1,0 +1,27 @@
+<%- include('./partials/header') %>
+
+<div class="edit-post-container w-full min-h-screen bg-gray-100 flex justify-center items-center">
+  <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" action="/posts/update/<%= post._id %>" method="POST" enctype="multipart/form-data">
+    <h2 class="text-2xl font-bold mb-4">Edit Post</h2>
+
+    <label class="block text-gray-700 text-sm font-bold mb-2">Title</label>
+    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      type="text" name="title" value="<%= post.title %>">
+
+    <label class="block text-gray-700 text-sm font-bold mt-4">Description</label>
+    <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      name="description" ><%= post.description %></textarea>
+
+    <label class="block text-gray-700 text-sm font-bold mt-4">Current Image</label>
+    <div class="w-40 h-40">
+      <img class="w-full h-full object-cover rounded" src="/images/uploads/<%= post.image %>" alt="Post Image">
+    </div>
+
+    <label class="block text-gray-700 text-sm font-bold mt-4">Upload New Image (Optional)</label>
+    <input class="mt-2" type="file" name="postimage">
+
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" type="submit">Update Post</button>
+  </form>
+</div>
+
+<%- include('./partials/footer') %>

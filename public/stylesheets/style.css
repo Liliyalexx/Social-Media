@@ -9,7 +9,7 @@
   box-sizing: border-box;
 }
 body {
-  background-image: url(/images/Desktop\ Screenshot\ 2023.12.14\ -\ 21.56.52.32.png);
+  background-image: url('/images/background.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -70,6 +70,7 @@ body::before{
   margin-top: 20px;
   margin-bottom: 35px;
   line-height: 1px;
+  color: #d811d8;
 }
 .detail {
   width: 100%;

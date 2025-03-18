@@ -128,22 +128,32 @@ router.put("/posts/update/:id", ensureAuthenticated, async (req, res) => {
       res.status(500).json({ message: error.message });
   }
 });
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) return next();
+  res.redirect("/");
+}
 
 
-// Update Post Route
 router.post("/posts/update/:id", isLoggedIn, upload.single("postimage"), async (req, res) => {
   try {
     const postId = req.params.id;
     const post = await postModel.findById(postId);
     if (!post) return res.status(404).send("Post not found");
 
-    if (post.user.toString() !== req.session.passport.user) return res.status(403).send("Unauthorized");
-    console.log("Session Data:", req.session);
+    // Fetch the currently logged-in user
+    const user = await userModel.findOne({ username: req.session.passport.user });
+    if (!user) return res.status(404).send("User not found");
 
+    // Compare post.user (ObjectId) with user._id (ObjectId)
+    if (post.user.toString() !== user._id.toString()) {
+      return res.status(403).send("Unauthorized");
+    }
 
+    // Update post fields
     post.title = req.body.title;
     post.description = req.body.description;
-    
+
+    // Update image if a new one is uploaded
     if (req.file) {
       const oldImagePath = path.join(__dirname, "../public/images/uploads", post.image);
       await fs.unlink(oldImagePath).catch(err => console.error("Error deleting old image:", err));
@@ -187,11 +197,6 @@ router.get("/logout", function (req, res, next) {
     res.redirect("/");
   });
 });
-
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) return next();
-  res.redirect("/");
-}
 
 router.post("/deletepost/:postId", isLoggedIn, async function (req, res, next) {
   try {
