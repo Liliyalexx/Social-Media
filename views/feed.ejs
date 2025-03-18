@@ -1,51 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visuality</title>
-    <link rel="stylesheet" href="/stylesheets/feed.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.7.0/fonts/remixicon.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visuality</title>
+  <link rel="stylesheet" href="/stylesheets/feed.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.7.0/fonts/remixicon.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
-    <!-- Navbar -->
-    <nav class="flex items-center justify-between py-4 px-8 bg-white shadow-md">
-        <div class="logo">
-            <img class="w-40" src="/images/PINS_BIG.png" alt="Logo">
-        </div>
-        <div class="link flex gap-6 items-center">
-            <a class="text-gray-700 hover:text-gray-900 font-medium" href="/profile">Profile</a>
-            <a class="text-gray-700 hover:text-gray-900 font-medium" href="/feed">Feed</a>
-            <a href="/logout" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full transition duration-300">
-                Log out
-            </a>
-        </div>
-    </nav>
+  <!-- Navbar -->
+  <nav class="flex items-center justify-between py-4 px-8 bg-white shadow-md">
+    <div class="logo">
+      <img class="w-40" src="/images/PINS_BIG.png" alt="Logo">
+    </div>
+    <div class="link flex gap-6 items-center">
+      <a class="text-gray-700 hover:text-gray-900 font-medium" href="/profile">Profile</a>
+      <a class="text-gray-700 hover:text-gray-900 font-medium" href="/feed">Feed</a>
+      <a href="/logout" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-full transition duration-300">Log out</a>
+    </div>
+  </nav>
 
-    <div class="container mx-auto p-6">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-10">
-          <% posts.forEach(function(elem) { %>
-              <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
-                  <!-- Square Image -->
-                  <div class="w-full h-[350px] overflow-hidden">
-                      <img class="w-full h-full object-cover" src="/images/uploads/<%= elem.image %>" alt="Post Image">
-                  </div>
-  
-                  <!-- Post Details -->
-                  <div class="p-5 text-center">
-                      <h5 class="text-md text-gray-500">@<%= elem.user.username %></h5>
-                      <h6 class="text-lg font-semibold text-gray-800 mt-1"><%= elem.title %></h6>
-                      <p class="text-sm text-gray-600 mt-2">
-                          <%= elem.description.split(" ").slice(0, 40).join(" ") + (elem.description.split(" ").length > 40 ? "..." : "") %>
-                      </p>
-                  </div>
-              </div>
-          <% }); %>
-      </div>
+  <div class="container mx-auto p-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-10">
+      <% posts.forEach(function(post) { %>
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+          <!-- Square Image -->
+          <div class="w-full h-[350px] overflow-hidden">
+            <img class="w-full h-full object-cover" src="/images/uploads/<%= post.image %>" alt="Post Image">
+          </div>
+          <!-- Post Details -->
+          <div class="p-5 text-center">
+            <h5 class="text-md text-gray-500">@<%= post.user.username %></h5>
+            <h6 class="text-lg font-semibold text-gray-800 mt-1"><%= post.title %></h6>
+            <p class="text-sm text-gray-600 mt-2">
+              <%= post.description ? post.description.split(" ").slice(0, 40).join(" ") + (post.description.split(" ").length > 40 ? "..." : "") : "" %>
+            </p>
+            <!-- Like and Comment Buttons -->
+            <div class="flex justify-between items-center mt-4">
+              <!-- Like Form -->
+              <form action="/posts/<%= post._id %>/like" method="POST">
+                <button type="submit" class="flex items-center text-red-500 hover:text-red-600">
+                  <i class="ri-heart-fill"></i>
+                  <span class="ml-1"><%= post.likes ? post.likes.length : 0 %></span>
+                </button>
+              </form>
+              <!-- Comment Toggle Button -->
+              <button type="button" onclick="toggleCommentForm('<%= post._id %>')" class="flex items-center text-blue-500 hover:text-blue-600">
+                <i class="ri-chat-3-fill"></i>
+                <span class="ml-1"><%= post.comments ? post.comments.length : 0 %></span>
+              </button>
+            </div>
+            <!-- Hidden Comment Form -->
+            <div id="comment-form-<%= post._id %>" class="mt-2 hidden">
+              <form action="/posts/<%= post._id %>/comment" method="POST" class="flex gap-2 items-center">
+                <input type="text" name="text" placeholder="Add a comment..." class="flex-1 p-2 border rounded" required>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded">Comment</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    </div>
   </div>
-  
 
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <script>
+    // Toggle comment form visibility for a specific post
+    function toggleCommentForm(postId) {
+      const form = document.getElementById(`comment-form-${postId}`);
+      form.classList.toggle('hidden');
+    }
+  </script>
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 </body>
 </html>
