@@ -47,6 +47,10 @@ app.use(flash());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+app.use((req, res, next) => {
+  res.locals.user = req.user; 
+  next();
+});
 
 // Set the view engine and views directory
 app.set('view engine', 'ejs');
