@@ -20,12 +20,26 @@ router.get("/signup", function (req, res, next) {
 });
 
 router.get("/profile", isLoggedIn, async function (req, res, next) {
-  const user = await userModel
-    .findOne({
-      username: req.session.passport.user,
-    })
-    .populate("posts");
-  res.render("profile", { user });
+  try {
+    const user = await userModel
+      .findOne({ username: req.session.passport.user })
+      .populate({
+        path: "posts",
+        populate: {
+          path: "comments.user", // Populate the user field in comments
+          select: "username profileImage", // Only fetch username and profileImage
+        },
+      });
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    res.render("profile", { user });
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 router.get("/show/posts", isLoggedIn, async function (req, res, next) {
@@ -50,9 +64,6 @@ router.get("/addpost", isLoggedIn, async function (req, res, next) {
   res.render("addpost", { user });
 });
 
-router.get("/feed", function (req, res, next) {
-  res.render("feed");
-});
 
 router.post(
   "/fileupload",
@@ -259,5 +270,55 @@ router.post("/deletepost/:postId", isLoggedIn, async function (req, res, next) {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
+
+router.get("/feed", isLoggedIn, async (req, res) => {
+  try {
+    const posts = await postModel.find().populate("user");
+    res.render("feed", { posts });  
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    res.status(500).send("Server error");
+  }
+});
+
+// Like route: toggles the like for the current user
+router.post("/posts/:id/like", isLoggedIn, async (req, res) => {
+  try {
+    const post = await postModel.findById(req.params.id);
+    if (!post) return res.status(404).send("Post not found");
+
+    // Toggle like: if user hasn't liked, push; if already liked, remove.
+    if (!post.likes.includes(req.user._id)) {
+      post.likes.push(req.user._id);
+    } else {
+      post.likes = post.likes.filter(id => id.toString() !== req.user._id.toString());
+    }
+    await post.save();
+    res.redirect("/feed");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// Comment route: adds a new comment to the post
+router.post("/posts/:id/comment", isLoggedIn, async (req, res) => {
+  try {
+    const post = await postModel.findById(req.params.id);
+    if (!post) return res.status(404).send("Post not found");
+
+    // Append a new comment object
+    post.comments.push({
+      user: req.user._id,
+      text: req.body.text
+    });
+    await post.save();
+    res.redirect("/feed");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 
 module.exports = router;
