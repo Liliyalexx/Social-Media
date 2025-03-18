@@ -8,16 +8,33 @@ const upload = require("../utils/fileUploader");
 const path = require("path");
 const fs = require("fs").promises;
 const localStrategy = require("passport-local");
+const getWeather = require("../utils/weather");
 passport.use(new localStrategy(userModel.authenticate()));
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  res.render("index", { error: req.flash("error") });
+router.get("/", async function (req, res, next) {
+  const city = "Seattle"; // Replace with the user's city or a dynamic value
+  let weather = null;
+  try {
+    weather = await getWeather(city);
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+    // If weather data fails, proceed without it
+  }
+  
+  res.render("index", { error: req.flash("error"), weather });
 });
 
+
+ 
 router.get("/signup", function (req, res, next) {
   res.render("signup");
 });
+
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) return next();
+  res.redirect("/");
+}
 
 router.get("/profile", isLoggedIn, async function (req, res, next) {
   try {
@@ -35,7 +52,12 @@ router.get("/profile", isLoggedIn, async function (req, res, next) {
       return res.status(404).send("User not found");
     }
 
-    res.render("profile", { user });
+    // Fetch weather data
+    const city = "Seattle"; // Replace with the user's city or a dynamic value
+    const weather = await getWeather(city);
+
+    // Render the profile view with user and weather data
+    res.render("profile", { user, weather });
   } catch (error) {
     console.error("Error fetching profile:", error);
     res.status(500).send("Internal Server Error");
@@ -57,19 +79,57 @@ router.get("/feed", isLoggedIn, async function (req, res, next) {
   res.render("feed", { user, posts });
 });
 
+
+
+router.get("/posts/edit/:id", isLoggedIn, async (req, res) => {
+  try {
+    const post = await postModel.findById(req.params.id);
+    if (!post) return res.status(404).send("Post not found");
+
+    // Fetch weather data
+    const city = "Seattle"; // Replace with the user's city or a dynamic value
+    let weather = null;
+    try {
+      weather = await getWeather(city);
+    } catch (error) {
+      console.error("Error fetching weather data:", error);
+      // If weather data fails, proceed without it
+    }
+
+    // Render the edit view with post and weather data
+    res.render("edit", { post, weather });
+  } catch (error) {
+    console.error("Error fetching post for edit:", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 router.get("/addpost", isLoggedIn, async function (req, res, next) {
-  const user = await userModel.findOne({
-    username: req.session.passport.user,
-  });
-  res.render("addpost", { user });
+  try {
+    const user = await userModel.findOne({
+      username: req.session.passport.user,
+    });
+
+    // Fetch weather data
+    const city = "Seattle"; // Replace with the user's city or a dynamic value
+    let weather = null;
+    try {
+      weather = await getWeather(city);
+    } catch (error) {
+      console.error("Error fetching weather data:", error);
+      // If weather data fails, proceed without it
+    }
+
+    // Render the addpost view with user and weather data
+    res.render("addpost", { user, weather });
+  } catch (error) {
+    console.error("Error fetching user for addpost:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 
-router.post(
-  "/fileupload",
-  isLoggedIn,
-  upload.single("image"),
-  async function (req, res, next) {
+router.post("/fileupload", isLoggedIn, upload.single("image"), async function (req, res, next) {
     const user = await userModel.findOne({
       username: req.session.passport.user,
     });
@@ -108,22 +168,27 @@ router.get("/posts/edit/:id", isLoggedIn, async (req, res) => {
     const post = await postModel.findById(req.params.id);
     if (!post) return res.status(404).send("Post not found");
 
-    res.render("edit", { post });
+    // Fetch weather data
+    const city = "Seattle"; // Replace with the user's city or a dynamic value
+    let weather = null;
+    try {
+      weather = await getWeather(city);
+    } catch (error) {
+      console.error("Error fetching weather data:", error);
+      // If weather data fails, proceed without it
+    }
+
+    // Render the edit view with post and weather data
+    res.render("edit", { post, weather });
   } catch (error) {
     console.error("Error fetching post for edit:", error);
     res.status(500).send("Internal Server Error");
   }
 });
 
-const ensureAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-      return next();
-  }
-  res.status(401).json({ message: "Unauthorized" });
-};
 
 // Apply this middleware to your update route
-router.put("/posts/update/:id", ensureAuthenticated, async (req, res) => {
+router.put("/posts/update/:id", isLoggedIn, async (req, res) => {
   try {
       const postId = req.params.id;
       const updatedData = req.body;
@@ -319,6 +384,5 @@ router.post("/posts/:id/comment", isLoggedIn, async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 module.exports = router;
