@@ -11,6 +11,7 @@
   font-family: "gilroy";
 }
 body{
+	background-image: url('/images/background.png');
 	background-color: rgb(241 245 249);
 }
 .container
