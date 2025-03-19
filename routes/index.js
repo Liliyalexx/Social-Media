@@ -14,9 +14,11 @@ const axios = require("axios");
 const sharp = require('sharp');
 // const generateImage = require("../utils/stabilityAI");
 const generateImage = require("../utils/deepAI");
+const fetchWeather = require("../middlewares/weatherMiddleware");
+
 
 /* GET home page. */
-router.get("/", async function (req, res, next) {
+router.get("/", fetchWeather(), async function (req, res, next) {
   const city = "Seattle"; // Replace with the user's city or a dynamic value
   let weather = null;
   try {
