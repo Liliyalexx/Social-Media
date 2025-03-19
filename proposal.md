@@ -1,5 +1,8 @@
 # Social Media App Proposal
 
+[trello workspace](https://trello.com/b/6MKoaEuz/backlog)
+
+
 ## 1. Entity-Relationship Diagram (ERD)
 
 ### Entities
@@ -58,6 +61,8 @@
 
 ```
 ---
+
+
 
 ### Deployment: Heroku
 
