@@ -111,7 +111,7 @@ A full-stack social media application built with Node.js, Express.js, MongoDB, a
 
 ## Deployment
 
-The app is deployed on **Heroku**. You can access it here: [Live Demo](#) <!-- Add your Heroku link here -->
+The app is deployed on **Heroku**. You can access it here: [Live Demo](https://social-media-visuality-6b16f66b0b08.herokuapp.com/) <!-- Add your Heroku link here -->
 
 ---
 

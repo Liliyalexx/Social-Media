@@ -1,5 +1,5 @@
 const dotenv = require("dotenv");
-dotenv.config();
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const User = require("./models/user");
@@ -13,6 +13,7 @@ const path = require('path');
 const bodyParser = require("body-parser");
 const axios = require("axios");
 const cors = require("cors");
+const MongoStore = require('connect-mongo');
 
 // Initialize routers
 const indexRouter = require('./routes/index');
@@ -21,15 +22,25 @@ const stabilityAI = require("./utils/stabilityAI");
 
 const app = express();
 const port = process.env.PORT || 3000;
+const mongoURI = process.env.MONGODB_URI;
+
+if (!mongoURI) {
+    console.error("MongoDB connection string is missing!");
+    process.exit(1);
+}
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log(`Connected to MongoDB: ${mongoose.connection.name}`);
-  })
-  .catch((err) => {
-    console.error('Error connecting to MongoDB:', err);
-  });
+mongoose.connect(mongoURI, { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true 
+})
+.then(() => {
+  console.log(`Connected to MongoDB: ${mongoose.connection.db.databaseName}`);
+})
+.catch((err) => {
+  console.error("Error connecting to MongoDB:", err);
+});
+
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -37,8 +48,16 @@ app.use(express.json());
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false,
-}));
+  saveUninitialized: true,
+  store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI, // Change from process.env.MONGO_URI
+      collectionName: "sessions",
+  }),
+  cookie: {
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+  }
+}))
+
 app.use(passport.initialize()); 
 app.use(passport.session()); 
 app.use(flash()); // Enable flash messages
