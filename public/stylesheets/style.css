@@ -304,3 +304,6 @@ input[type=number] {
     background-image: url('/images/social3.jpg');
   }
 }
+.weather-container{
+  margin-left:100px;
+}

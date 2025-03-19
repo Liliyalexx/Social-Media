@@ -11,11 +11,13 @@ const flash = require('connect-flash');
 const upload = require("./utils/fileUploader");
 const path = require('path');
 const bodyParser = require("body-parser");
-
+const axios = require("axios");
+const cors = require("cors");
 
 // Initialize routers
 const indexRouter = require('./routes/index');
 const getWeather = require("./utils/weather");
+const stabilityAI = require("./utils/stabilityAI");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -37,9 +39,13 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
 }));
-app.use(passport.initialize()); // Initialize Passport
-app.use(passport.session()); // Enable session support for Passport
+app.use(passport.initialize()); 
+app.use(passport.session()); 
 app.use(flash()); // Enable flash messages
+app.use(cors());
+app.get('/api/data', (req, res) => {
+  res.json({ message: 'This is CORS-enabled for all origins!' });
+});
 
 // Passport configuration
 passport.use(new LocalStrategy(User.authenticate()));

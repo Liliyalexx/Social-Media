@@ -10,6 +10,10 @@ const fs = require("fs").promises;
 const localStrategy = require("passport-local");
 const getWeather = require("../utils/weather");
 passport.use(new localStrategy(userModel.authenticate()));
+const axios = require("axios");
+const sharp = require('sharp');
+// const generateImage = require("../utils/stabilityAI");
+const generateImage = require("../utils/deepAI");
 
 /* GET home page. */
 router.get("/", async function (req, res, next) {
@@ -207,10 +211,6 @@ router.put("/posts/update/:id", isLoggedIn, async (req, res) => {
       res.status(500).json({ message: error.message });
   }
 });
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) return next();
-  res.redirect("/");
-}
 
 
 router.post("/posts/update/:id", isLoggedIn, upload.single("postimage"), async (req, res) => {
@@ -388,4 +388,60 @@ router.post("/posts/:id/comment", isLoggedIn, async (req, res) => {
   }
 });
 
+// Route to handle theme selection STABILITYAI
+// router.get("/generate", async (req, res) => {
+//   const { theme, height = 512, width = 512 } = req.query;
+//   const city = "Seattle"; 
+//   let weather = null;
+//   try {
+//     // Fetch weather data
+//     weather = await getWeather(city);
+//   } catch (error) {
+//     console.error("Error fetching weather data:", error);
+//     // If weather data fails, proceed without it
+//   }
+
+//   try {
+//     const imageUrl = await generateImage(theme, "webp", height, width);
+
+//     // Render the generated.ejs view with image data
+//     res.render("generated", {
+//       imageName: theme,
+//       imageUrl: `data:image/webp;base64,${imageUrl}`, 
+//       weather: weather, 
+//     });
+//   } catch (error) {
+//     console.error("Error generating image:", error);
+//     res.status(500).send("Failed to generate image");
+//   }
+// });
+    //DEEPAI
+    router.get("/generate", async (req, res) => {
+      const { theme } = req.query; // Get the prompt from the query string
+      const city = "Seattle"; 
+      let weather = null;
+      try {
+        weather = await getWeather(city);
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+        // If weather data fails, proceed without it
+      }
+      if (!theme) {
+        return res.status(400).send("Theme (prompt) is required.");
+      }
+    
+      try {
+        const imageUrl = await generateImage(theme); // Call the DeepAI utility function
+        res.render("generated", {
+          imageName: theme,
+          imageUrl: imageUrl,
+          weather: weather, 
+        });
+      } catch (error) {
+        console.error("Error generating image:", error);
+        res.status(500).send("Failed to generate image");
+      }
+    });
+    
+  
 module.exports = router;

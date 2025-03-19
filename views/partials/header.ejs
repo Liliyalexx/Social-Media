@@ -7,16 +7,18 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.7.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap" rel="stylesheet">
 </head>
 <body>
     <nav class="flex items-center justify-between py-[10px] px-[20px] w-full bg-pink-500">
         <!-- Logo -->
         <div class="logo">
             <img class="w-[100px] rounded-full" src="/images/favicon-16x16.png" alt="Logo">
+            <p class="font-alex-brush text-white font-bold text-2xl">Visuality</p>
         </div>
 
         <!-- Weather Container -->
-        <div class="weather-container flex items-center gap-1 bg-white/20 p-0rounded-lg">
+        <div class="weather-container flex items-center gap-1 bg-white/40 p-1 rounded-lg"  style="transform: scale(1.5); ">
             <% if (weather) { %>
               <img src="http://openweathermap.org/img/wn/<%= weather.icon %>.png" alt="Weather Icon">
               <div>

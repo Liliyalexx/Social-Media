@@ -10,7 +10,7 @@
   <meta name="theme-color" content="#ffffff">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Visionary</title>
+  <title>Visuality</title>
   <link rel="stylesheet" href="/stylesheets/profile.css">
   <script src="https://kit.fontawesome.com/14f67ef9ae.js" crossorigin="anonymous"></script>
 </head>
@@ -23,7 +23,7 @@
 
   <!-- Profile Content -->
   <div class="profile w-full min-h-screen text-gray-800 pt-1 relative z-10">
-    <form id="uploadform" hidden action="/fileupload" method="post" enctype="multipart/form-data">
+    <form id="uploadform" hidden action="/fileupload" method="post" enctype="multipart/form-data" >
       <input type="file" name="image">
     </form>
     <div class="profdets flex flex-col items-center mt-20">
@@ -31,8 +31,8 @@
         <span id="uploadicon" class="w-8 h-8 absolute bottom-0 right-0 rounded-full flex items-center justify-center bg-zinc-400 cursor-pointer">
           <i class="ri-pencil-fill"></i>
         </span>
-        <div class="w-32 h-32 bg-white rounded-full overflow-hidden">
-          <img class="w-full h-full object-cover" src="/images/uploads/<%= user.profileImage %>" alt="">
+        <div class="w-40 h-40 bg-white rounded-full m-16 overflow-hidden mt-300">
+          <img class="profile" class="w-full h-full object-cover" src="/images/uploads/<%= user.profileImage %>" alt="">
         </div>
       </div>
       
@@ -40,6 +40,30 @@
       <h3 class="text-md text-gray-500 text-base">@<%= user.username %></h3>
       <a href="/addpost" class="bg-purple-500 hover:bg-pink-600 text-white font-bold py-2 px-10 rounded">Add New Post</a>
     </div>
+
+    <!-- Theme Options for Image Generation -->
+    <div class="theme-options flex flex-wrap justify-center gap-4 mt-10">
+      <p> Generate Your Image </p>
+      <a href="/generate?theme=flowers" class="theme-btn bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
+        Flowers
+      </a>
+      <a href="/generate?theme=cities" class="theme-btn bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
+        Cities
+      </a>
+      <a href="/generate?theme=cars" class="theme-btn bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
+        Cars
+      </a>
+      <a href="/generate?theme=sports" class="theme-btn bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
+        Sports
+      </a>
+      <a href="/generate?theme=school" class="theme-btn bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
+        School
+      </a>
+      <a href="/generate?theme=animals" class="theme-btn bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
+        Animals
+      </a>
+    </div>
+  </div>
   
     <div class="cards flex flex-wrap gap-10 px-10 mt-10">
       <% user.posts.forEach(post => { %>
@@ -94,6 +118,7 @@
       document.querySelector("#uploadform").submit();
     });
   </script>
+
 
   <!-- Footer -->
   <%- include('./partials/footer') %>
