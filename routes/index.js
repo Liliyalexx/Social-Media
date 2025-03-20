@@ -33,8 +33,16 @@ router.get("/", fetchWeather(), async function (req, res, next) {
 
 
  
-router.get("/signup", function (req, res, next) {
-  res.render("signup");
+router.get("/signup", async function (req, res, next) {
+  const city = "Seattle"; 
+  let weather = null;
+  try {
+    weather = await getWeather(city);
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+    // If weather data fails, proceed without it
+  }
+  res.render("signup",  { error: req.flash("error"), weather });
 });
 
 function isLoggedIn(req, res, next) {

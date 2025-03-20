@@ -19,7 +19,7 @@ body {
   
 }
 nav{
-  background-color: turquoise;
+  background-color: red;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -32,7 +32,7 @@ nav img{
   width: 200px;
 }
 .container {
-  background-color:blue;
+  background-color:rgb(51, 130, 51);
   width: 550px;
   min-height: 600px;
   height: auto;
@@ -63,7 +63,7 @@ nav img{
   margin-top: 20px;
   margin-bottom: 35px;
   line-height: 1px;
-  color: red;
+  color: #ef090d;
 }
 .detail {
   width: 100%;
@@ -156,6 +156,7 @@ nav img{
 
 footer p {
   font-size: 12px;
+  color: red;
   margin: 10px;
   opacity: 0.7;
 }
@@ -307,4 +308,21 @@ input[type=number] {
 }
 .weather-container{
   margin-left:100px;
+}
+
+.container-signup{
+  background-color:rgb(51, 130, 51);
+  width: 550px;
+  min-height: 600px;
+  height: auto;
+  position: absolute;
+  margin: auto;
+  margin-top: 145px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 10px;
+  box-shadow: 2px 2px 3px -1px rgba(0, 0, 0, 0.5);
+  z-index: 3;
+  padding: 15px 0;
 }

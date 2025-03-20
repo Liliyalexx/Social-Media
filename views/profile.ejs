@@ -38,28 +38,28 @@
       
       <h1 class="text-3xl font-semibold"><%= user.fullname %></h1>
       <h3 class="text-md text-gray-500 text-base">@<%= user.username %></h3>
-      <a href="/addpost" class="bg-blue-600 hover:bg-red-500 text-white font-bold py-2 px-10 rounded">Add New Post</a>
+      <a href="/addpost" class="bg-green-600 hover:bg-red-500 text-white font-bold py-2 px-10 rounded">Add New Post</a>
     </div>
 
     <!-- Theme Options for Image Generation -->
     <div class="theme-options flex flex-wrap justify-center gap-4 mt-10">
       <p> Generate Your Image </p>
-      <a href="/generate?theme=flowers" class="theme-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
+      <a href="/generate?theme=flowers" class="theme-btn bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
         Flowers
       </a>
-      <a href="/generate?theme=cities" class="theme-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
+      <a href="/generate?theme=cities" class="theme-btn bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
         Cities
       </a>
-      <a href="/generate?theme=cars" class="theme-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
+      <a href="/generate?theme=cars" class="theme-btn bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
         Cars
       </a>
-      <a href="/generate?theme=sports" class="theme-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
+      <a href="/generate?theme=sports" class="theme-btn bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
         Sports
       </a>
-      <a href="/generate?theme=school" class="theme-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
+      <a href="/generate?theme=school" class="theme-btn bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
         School
       </a>
-      <a href="/generate?theme=animals" class="theme-btn bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
+      <a href="/generate?theme=animals" class="theme-btn bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
         Animals
       </a>
     </div>
@@ -102,7 +102,7 @@
   
           <!-- Edit Button -->
           <div class="w-full flex justify-center mt-2">
-            <a href="/posts/edit/<%= post._id %>" class="bg-blue-600 hover:bg-purple-600 text-white font-bold py-1 px-20 rounded-lg overflow-hidden text-center">Edit</a>
+            <a href="/posts/edit/<%= post._id %>" class="bg-green-600 hover:bg-red-600 text-white font-bold py-1 px-20 rounded-lg overflow-hidden text-center">Edit</a>
           </div>
         </div>
       <% }); %>
