@@ -8,6 +8,7 @@
     "start": "NODE_ENV=production node server.js",
     "dev": "nodemon server.js",
     "build:css": "tailwindcss -i ./src/input.css -o ./dist/output.css",
+    "postinstall": "npx tailwindcss -i ./src/input.css -o ./dist/output.css",
     "build": "npm run build:css && echo 'Build completed'"
   },
   "author": "Liliya Fedyurina",
