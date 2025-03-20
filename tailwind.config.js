@@ -2,9 +2,9 @@
 // tailwind.config.js
 module.exports = {
   content: [
-    "./views/**/*.ejs", // Add paths to all your template files
+    "./views/**/*.ejs", 
     "./public/**/*.html",
-    "./src/**/*.js",
+   
   ],
   theme: {
     extend: {},
