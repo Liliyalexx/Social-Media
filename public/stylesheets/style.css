@@ -32,8 +32,8 @@ nav img{
   width: 200px;
 }
 .container {
-  background-color:rgb(51, 130, 51);
-  width: 550px;
+  background-color:rgb(94, 175, 94);
+  width: 450px;
   min-height: 600px;
   height: auto;
   position: absolute;
@@ -58,7 +58,7 @@ nav img{
   position: relative;
 }
 .header {
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 500;
   margin-top: 20px;
   margin-bottom: 35px;
@@ -311,8 +311,8 @@ input[type=number] {
 }
 
 .container-signup{
-  background-color:rgb(51, 130, 51);
-  width: 550px;
+  background-color:rgb(94, 175, 94);
+  width: 450px;
   min-height: 600px;
   height: auto;
   position: absolute;
