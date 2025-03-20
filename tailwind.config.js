@@ -1,16 +1,13 @@
 /** @type {import('tailwindcss').Config} */
+// tailwind.config.js
 module.exports = {
   content: [
-    './views/**/*.ejs', 
-    './public/**/*.html', 
+    "./views/**/*.ejs", // Add paths to all your template files
+    "./public/**/*.html",
+    "./src/**/*.js",
   ],
   theme: {
-    extend: {
-      fontFamily: {
-        'alex-brush': ['Alex Brush', 'cursive'],
-      },
-    },
+    extend: {},
   },
   plugins: [],
-}
-
+};
