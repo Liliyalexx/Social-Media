@@ -2,6 +2,9 @@
 [Visuality Social Media](https://social-media-visuality-6b16f66b0b08.herokuapp.com/)
 
 ![Social Media App Screenshot](public/images/social1.jpg) 
+![Social Media App Screenshot](public/images/Screenshot1.png) 
+![Social Media App Screenshot](public/images/Screenshot2.png) 
+![Social Media App Screenshot](public/images/Screenshot3.png) 
 [trello workspace](https://trello.com/b/6MKoaEuz/backlog)
 
 A full-stack social media application built with Node.js, Express.js, MongoDB, and Tailwind CSS. Users can create profiles, upload posts, organize posts into boards, and interact with other users' content. The app also integrates a **Weather API** and an **AI Image Generator** powered by DeepAI.
