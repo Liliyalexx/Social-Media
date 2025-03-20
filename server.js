@@ -21,7 +21,7 @@ const getWeather = require("./utils/weather");
 const stabilityAI = require("./utils/stabilityAI");
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 const mongoURI = process.env.MONGODB_URI;
 
 if (!mongoURI) {
@@ -30,17 +30,13 @@ if (!mongoURI) {
 }
 
 // Connect to MongoDB
-mongoose.connect(mongoURI, { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true 
-})
-.then(() => {
-  console.log(`Connected to MongoDB: ${mongoose.connection.db.databaseName}`);
-})
-.catch((err) => {
-  console.error("Error connecting to MongoDB:", err);
-});
-
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((err) => {
+    console.error('Failed to connect to MongoDB:', err);
+  });
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
