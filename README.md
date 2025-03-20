@@ -125,6 +125,7 @@ The app is deployed on **Heroku**. You can access it here: [Live Demo](https://s
 ```bash
 git clone https://github.com/Liliyalexx/Social-Media.git
 cd Social-Media
+```
 
-### **Future Enhancements**
+### Future Enhancements
 In future updates, I plan to enhance the **AI Image Generator** feature by replacing the current **button-based image selection** with a more **detailed description-based AI generation**. This will allow users to input a more **specific text prompt**, resulting in **more customized and accurate** AI-generated images. This improvement will enhance user experience by providing more **personalized and meaningful** visual content.
