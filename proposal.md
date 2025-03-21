@@ -239,6 +239,8 @@
 
 # Social Media Visuality  
 
+# Social Media Visuality  
+
 ## Introduction  
 **Social Media Visuality** is a full-stack social media application that allows users to:  
 - Interact with posts  
@@ -265,6 +267,23 @@
 - **Media Upload**: Upload profile pictures and images with descriptions.  
 - **User Engagement**: Like and comment on posts.  
 - **Activity Tracking**: View interactions on personal posts.  
+
+## Challenges & Solutions  
+
+### 🌩️ Weather API Optimization  
+Initially, the **Weather API** fetched data every minute, causing the application to become too heavy and making the browser completely unresponsive—even the **Inspect** tool stopped working.  
+
+**Solution**:  
+- Implemented **caching** to store weather data and only update it **on request** or once every **24 hours**.  
+- This significantly improved performance and made the app run smoothly.  
+
+### 🤖 AI Image API Transition  
+Originally, I implemented **Stability AI**, which took a few hours to integrate and worked **perfectly**—until after two images, when it required a **costly** upgrade.  
+
+**Solution**:  
+- Switched to **DeepAI**, which was more affordable.  
+- Paid from the start to avoid surprises.  
+- Rebuilt the AI integration from scratch, and **finally, everything worked perfectly**.  
 
 ## Tech Stack  
 
@@ -298,4 +317,3 @@
 
 ### 👏 Thank you for checking out this project!  
 Feel free to contribute or provide feedback! 🚀  
-
