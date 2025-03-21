@@ -239,8 +239,6 @@
 
 # Social Media Visuality  
 
-# Social Media Visuality  
-
 ## Introduction  
 **Social Media Visuality** is a full-stack social media application that allows users to:  
 - Interact with posts  
