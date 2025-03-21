@@ -46,7 +46,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URI, // Change from process.env.MONGO_URI
+      mongoUrl: process.env.MONGODB_URI, 
       collectionName: "sessions",
   }),
   cookie: {
@@ -56,7 +56,7 @@ app.use(session({
 
 app.use(passport.initialize()); 
 app.use(passport.session()); 
-app.use(flash()); // Enable flash messages
+app.use(flash()); 
 app.use(cors());
 app.get('/api/data', (req, res) => {
   res.json({ message: 'This is CORS-enabled for all origins!' });
@@ -69,9 +69,9 @@ passport.deserializeUser(User.deserializeUser());
 
 // Middleware to pass user and flash messages to views
 app.use((req, res, next) => {
-  res.locals.user = req.user; // Make user available in views
-  res.locals.error = req.flash("error"); // Make flash error messages available in views
-  res.locals.success = req.flash("success"); // Make flash success messages available in views
+  res.locals.user = req.user; 
+  res.locals.error = req.flash("error"); 
+  res.locals.success = req.flash("success"); 
   next();
 });
 

@@ -24,7 +24,7 @@ const getWeather = async (city, forceUpdate = false) => {
       description: response.data.weather[0].description,
       icon: response.data.weather[0].icon,
     };
-    lastUpdated = now; // Update the last updated timestamp
+    lastUpdated = now; 
     console.log("Fetched fresh weather data");
     return cachedWeather;
   } catch (error) {

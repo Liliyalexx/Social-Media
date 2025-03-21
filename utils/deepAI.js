@@ -1,21 +1,20 @@
 const axios = require("axios");
-require("dotenv").config(); // Load environment variables
+require("dotenv").config(); 
 
 const generateImage = async (prompt) => {
   try {
     const response = await axios.post(
       "https://api.deepai.org/api/text2img",
-      { text: prompt }, // Send the prompt in the request body
+      { text: prompt }, 
       {
         headers: {
-          "Api-Key": process.env.DEEP_AI_API_KEY, // Use the API key from .env
+          "Api-Key": process.env.DEEP_AI_API_KEY, 
         },
       }
     );
 
     if (response.status === 200) {
-      return response.data.output_url; // Return the generated image URL
-    } else {
+      return response.data.output_url; 
       throw new Error(`${response.status}: ${response.data}`);
     }
   } catch (error) {

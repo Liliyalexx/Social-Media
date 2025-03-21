@@ -186,13 +186,13 @@ router.get("/posts/edit/:id", isLoggedIn, async (req, res) => {
     if (!post) return res.status(404).send("Post not found");
 
     // Fetch weather data
-    const city = "Seattle"; // Replace with the user's city or a dynamic value
+    const city = "Seattle"; 
     let weather = null;
     try {
       weather = await getWeather(city);
     } catch (error) {
       console.error("Error fetching weather data:", error);
-      // If weather data fails, proceed without it
+     
     }
 
     // Render the edit view with post and weather data
@@ -427,14 +427,14 @@ router.post("/posts/:id/comment", isLoggedIn, async (req, res) => {
 // });
     //DEEPAI
     router.get("/generate", async (req, res) => {
-      const { theme } = req.query; // Get the prompt from the query string
+      const { theme } = req.query; 
       const city = "Seattle"; 
       let weather = null;
       try {
         weather = await getWeather(city);
       } catch (error) {
         console.error("Error fetching weather data:", error);
-        // If weather data fails, proceed without it
+       
       }
       if (!theme) {
         return res.status(400).send("Theme (prompt) is required.");

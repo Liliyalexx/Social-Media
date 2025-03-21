@@ -47,10 +47,9 @@
 <script>
   function showConfirmation(postId) {
     if (confirm("Do you really want to delete this post?")) {
-      // If the user clicks "OK", proceed with the deletion
       deletePost(postId);
     } else {
-      // If the user clicks "Cancel", do nothing
+    
     }
   }
 
@@ -66,9 +65,7 @@
       return response.json();
     })
     .then(data => {
-      // Assuming the server responds with a JSON indicating success
       if (data.success) {
-        // Remove the deleted post from the DOM
         const deletedPost = document.querySelector(`[data-post-id="${postId}"]`).closest('.card');
         if (deletedPost) {
           deletedPost.remove();
