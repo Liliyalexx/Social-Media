@@ -235,3 +235,75 @@
 - **Response**: Returns the updated board details.
 
 ### The app will allow users to create profiles, upload posts, organize posts into boards, and interact with other users' content. The proposed tech stack ensures scalability, security, and a seamless user experience.
+
+
+Presentation
+Social Media Visuality Presentation
+
+Introduction
+
+Welcome to the presentation of Social Media Visuality, a full-stack social media application that allows users to interact, share, and explore posts with AI-generated images and real-time weather updates.
+
+Key Features
+
+1. Dynamic UI & Background
+
+Implemented a carousel for the background, creating a dynamic and visually engaging interface.
+
+Responsive design using Tailwind CSS.
+
+2. Third-Party API Integrations
+
+Integrated a Weather API to display real-time weather updates on user profiles.
+
+Implemented AI Image Generation with DeepAI to allow users to create unique images for posts.
+
+3. AI Image Generator Implementation
+
+Initially used Stability AI, but due to high costs, switched to DeepAI, a more affordable alternative.
+
+Users can generate images for themes and integrate them into posts.
+
+Paid for AI-generated images to enhance the user experience.
+
+4. Social Media Functionality
+
+Post Creation & Management: Users can create, edit, update, and delete posts.
+
+Image & Profile Management: Upload profile pictures and post images with descriptions.
+
+User Interaction: Comment on and like posts.
+
+Activity Tracking: Users can check who commented on their posts and engage with others.
+
+5. Tech Stack Used
+
+Frontend: EJS (server-side rendering), Tailwind CSS.
+
+Backend: Node.js, Express.js.
+
+Database: MongoDB (Mongoose ORM).
+
+Authentication: Passport.js for secure login.
+
+Session Management: Express Session.
+
+Live Demo
+
+The application is deployed on Heroku.
+
+Link: Visuality Social Media
+
+Future Enhancements
+
+Enhancing the AI Image Generator to allow users to input detailed text descriptions for more customized images.
+
+Improving UI/UX for better user interaction.
+
+Expanding the application with more interactive features, such as user-to-user messaging.
+
+Conclusion
+
+The Social Media Visuality project combines traditional social media functionalities with modern AI-driven content creation and third-party API integrations, offering users a unique and engaging experience.
+
+Thank you for your time!
